@@ -6,9 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 
 
-namespace BaşarSoftDeneme.Models
+
+namespace BaşarSoftDeneme.Services
 {
-    public class PointService : IPointService
+    public class PointService : IPointService<Point>
     {
         private readonly dbContext _context;
 
@@ -17,53 +18,37 @@ namespace BaşarSoftDeneme.Models
             _context = context;
         }
 
-        public Point? GetById(long id)
+        public async Task<Point> GetByIdAsync(long id)
         {
-
-            return _context.Points
-                .FromSqlRaw("SELECT * FROM \"points\" WHERE \"id\" = {0}", id)
-                .FirstOrDefault();
+            return await _context.Points.FindAsync(id);
         }
 
-        public IEnumerable<Point> GetAll()
+        public async Task<IEnumerable<Point>> GetAllAsync()
         {
-
-            return _context.Points
-                .FromSqlRaw("SELECT * FROM \"points\"")
-                .ToList();
+            return await _context.Points.ToListAsync();
         }
 
-        public Point Create(Point point)
+        public async Task<Point> AddAsync(Point point)
         {
-
-            _context.Database.ExecuteSqlRaw(
-                "INSERT INTO \"points\" (\"pointx\", \"pointy\", \"name\") VALUES ({0}, {1}, {2}) RETURNING \"id\"",
-                point.PointX, point.PointY, point.Name
-            );
+            _context.Points.Add(point);
+            await _context.SaveChangesAsync();
             return point;
         }
 
-        public Point Update(Point point)
+        public async Task UpdateAsync(Point point)
         {
-            
-            _context.Database.ExecuteSqlRaw(
-                "UPDATE \"points\" SET \"pointx\" = {0}, \"pointy\" = {1}, \"name\" = {2} WHERE \"id\" = {3}",
-                point.PointX, point.PointY, point.Name, point.Id
-            );
-
-            
-            return point;
+            _context.Points.Update(point);
+            await _context.SaveChangesAsync();
         }
 
-        public bool Delete(long id)
+        public async Task DeleteAsync(long id)
         {
-            
-            var result = _context.Database.ExecuteSqlRaw(
-                "DELETE FROM \"points\" WHERE \"id\" = {0}", id
-            );
-
-            
-            return result > 0;
+            var point = await _context.Points.FindAsync(id);
+            if (point != null)
+            {
+                _context.Points.Remove(point);
+                await _context.SaveChangesAsync();
+            }
         }
 
     }

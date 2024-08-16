@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BaşarSoftDeneme.Interfaces;
-
 using Microsoft.EntityFrameworkCore;
 using BaşarSoftDeneme.Models;
+using BaşarSoftDeneme.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,23 +15,40 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add your services here
-builder.Services.AddScoped<IPointService, PointService>();
+// Register your services here
+builder.Services.AddScoped<IPointService<Point>, PointService>();
 
 // Configure Entity Framework with PostgreSQL
 builder.Services.AddDbContext<dbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Configure CORS (if needed)
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
 
 app.UseHttpsRedirection();
+app.UseCors(); // Apply CORS policy
+
 app.UseAuthorization();
 app.MapControllers();
 

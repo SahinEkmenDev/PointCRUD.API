@@ -6,5 +6,6 @@
         public double PointX { get; set; }
         public double PointY { get; set; }
         public String Name { get; set; }
+     
     }
 }
