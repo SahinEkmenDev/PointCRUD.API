@@ -35,11 +35,20 @@ namespace BaşarSoftDeneme.Services
             return point;
         }
 
-        public async Task UpdateAsync(Point point)
+        public async Task UpdateAsync(Point entity)
         {
-            _context.Points.Update(point);
-            await _context.SaveChangesAsync();
+            var existingEntity = await _context.Points.FindAsync(entity.Id);
+            if (existingEntity != null)
+            {
+                _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new InvalidOperationException("Güncellenecek kayıt bulunamadı.");
+            }
         }
+
 
         public async Task DeleteAsync(long id)
         {
