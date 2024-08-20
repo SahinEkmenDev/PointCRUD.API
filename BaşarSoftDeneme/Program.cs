@@ -16,7 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Register your services here
-builder.Services.AddScoped<IPointService<Point>, PointService>();
+builder.Services.AddScoped(typeof(IRepositoryService<>), typeof(RepositoryService<>));
 
 // Configure Entity Framework with PostgreSQL
 builder.Services.AddDbContext<dbContext>(options =>

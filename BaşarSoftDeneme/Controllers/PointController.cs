@@ -12,9 +12,9 @@ namespace BaşarSoftDeneme.Controllers
     [ApiController]
     public class PointController : ControllerBase
     {
-        private readonly IPointService<Point> _pointService;
+        private readonly IRepositoryService<Point> _pointService;
 
-        public PointController(IPointService<Point> pointService)
+        public PointController(IRepositoryService<Point> pointService)
         {
             _pointService = pointService;
         }
@@ -25,11 +25,7 @@ namespace BaşarSoftDeneme.Controllers
         {
             try
             {
-                Console.WriteLine($"GetById çağrıldı. ID: {id}");
-
                 var response = await _pointService.GetByIdAsync(id);
-
-                Console.WriteLine(response == null ? "Point bulunamadı." : "Point başarıyla bulundu.");
 
                 if (response != null)
                     return Ok(new Response<Point> { Status = true, Value = response, Message = "Point başarıyla alındı." });
@@ -38,7 +34,7 @@ namespace BaşarSoftDeneme.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"GetById sırasında hata: {ex.Message}");
+            
                 return StatusCode(500, new Response { Status = false, Message = "GetById işlemi sırasında bir hata oluştu." });
             }
         }
@@ -54,7 +50,6 @@ namespace BaşarSoftDeneme.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"GetAll sırasında hata: {ex.Message}");
                 return StatusCode(500, new Response { Status = false, Message = "GetAll işlemi sırasında bir hata oluştu." });
             }
         }
@@ -82,35 +77,25 @@ namespace BaşarSoftDeneme.Controllers
         public async Task<IActionResult> Update(long id, Point point)
         {
             try
-            {
-                Console.WriteLine($"URL'den gelen ID: {id}, Point nesnesindeki ID: {point.Id}");
-
+            {        
                 if (id != point.Id)
-                {
-                    Console.WriteLine($"ID uyuşmazlığı. URL'den gelen ID: {id}, Point nesnesindeki ID: {point.Id}");
+                {               
                     return BadRequest(new Response { Status = false, Message = $"ID uyuşmazlığı. URL'den gelen ID: {id}, Point nesnesindeki ID: {point.Id}" });
                 }
 
                 var existingPoint = await _pointService.GetByIdAsync(id);
                 if (existingPoint == null)
                 {
-                    Console.WriteLine("Point bulunamadı.");
                     return NotFound(new Response { Status = false, Message = "Point bulunamadı." });
                 }
-
-                Console.WriteLine("Güncelleme işlemi başlıyor.");
                 await _pointService.UpdateAsync(point);
-                Console.WriteLine("Point başarıyla güncellendi.");
                 return Ok(new Response { Status = true, Message = "Point başarıyla güncellendi." });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Güncelleme sırasında hata: {ex.Message}");
                 return StatusCode(500, new Response { Status = false, Message = "Güncelleme sırasında bir hata oluştu." });
             }
         }
-
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
@@ -126,7 +111,6 @@ namespace BaşarSoftDeneme.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Delete sırasında hata: {ex.Message}");
                 return StatusCode(500, new Response { Status = false, Message = "Delete işlemi sırasında bir hata oluştu." });
             }
         }

@@ -8,7 +8,7 @@ using BaşarSoftDeneme.Services;
 
 namespace BaşarSoftDeneme.Interfaces
 {
-    public interface IPointService<T>
+    public interface IRepositoryService<T> where T : class
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(long id);
