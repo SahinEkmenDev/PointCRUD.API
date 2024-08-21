@@ -2,9 +2,9 @@
 
 namespace BaşarSoftDeneme.Models
 {
-    public class dbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public dbContext(DbContextOptions<dbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<Point> Points { get; set; }
 

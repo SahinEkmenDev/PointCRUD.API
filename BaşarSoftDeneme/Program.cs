@@ -18,8 +18,11 @@ builder.Services.AddSwaggerGen();
 // Register your services here
 builder.Services.AddScoped(typeof(IRepositoryService<>), typeof(RepositoryService<>));
 
+// Unit of Work for Dependency Injection
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 // Configure Entity Framework with PostgreSQL
-builder.Services.AddDbContext<dbContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configure CORS (if needed)
