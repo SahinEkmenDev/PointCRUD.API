@@ -20,7 +20,6 @@ namespace BaşarSoftDeneme.Controllers
         }
 
         [HttpGet("{id}")]
-
         public async Task<IActionResult> GetById(long id)
         {
             try
@@ -34,11 +33,9 @@ namespace BaşarSoftDeneme.Controllers
             }
             catch (Exception ex)
             {
-            
                 return StatusCode(500, new Response { Status = false, Message = "GetById işlemi sırasında bir hata oluştu." });
             }
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -59,27 +56,25 @@ namespace BaşarSoftDeneme.Controllers
         {
             try
             {
-                if (point == null)
-                    return BadRequest(new Response { Status = false, Message = "Point boş olamaz." });
+                if (point == null || string.IsNullOrEmpty(point.WKT))
+                    return BadRequest(new Response { Status = false, Message = "Point veya WKT boş olamaz." });
 
                 var createdPoint = await _pointService.AddAsync(point);
                 return CreatedAtAction(nameof(GetById), new { id = createdPoint.Id }, new Response<Point> { Status = true, Value = createdPoint, Message = "Point başarıyla oluşturuldu." });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Add sırasında hata: {ex.Message}");
                 return StatusCode(500, new Response { Status = false, Message = "Add işlemi sırasında bir hata oluştu." });
             }
         }
-
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(long id, Point point)
         {
             try
-            {        
+            {
                 if (id != point.Id)
-                {               
+                {
                     return BadRequest(new Response { Status = false, Message = $"ID uyuşmazlığı. URL'den gelen ID: {id}, Point nesnesindeki ID: {point.Id}" });
                 }
 
@@ -115,4 +110,5 @@ namespace BaşarSoftDeneme.Controllers
             }
         }
     }
+    
 }

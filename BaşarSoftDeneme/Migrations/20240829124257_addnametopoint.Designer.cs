@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BaşarSoftDeneme.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240816200334_initial")]
-    partial class initial
+    [Migration("20240829124257_addnametopoint")]
+    partial class addnametopoint
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,11 +36,9 @@ namespace BaşarSoftDeneme.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<double>("PointX")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("PointY")
-                        .HasColumnType("double precision");
+                    b.Property<string>("WKT")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

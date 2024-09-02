@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BaşarSoftDeneme.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class UpdatePointToWKT : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,9 +17,7 @@ namespace BaşarSoftDeneme.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PointX = table.Column<double>(type: "double precision", nullable: false),
-                    PointY = table.Column<double>(type: "double precision", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    WKT = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

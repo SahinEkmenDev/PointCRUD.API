@@ -15,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 // Register your services here
 builder.Services.AddScoped(typeof(IRepositoryService<>), typeof(RepositoryService<>));
 
@@ -28,13 +29,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Configure CORS (if needed)
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    options.AddDefaultPolicy(policy =>
     {
-        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
 var app = builder.Build();
+
+app.UseStaticFiles();
+
+// Varsayılan olarak index.html'ye yönlendirme
+app.UseRouting();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -45,7 +53,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("index.html");
     app.UseHsts();
 }
 
@@ -54,5 +62,12 @@ app.UseCors(); // Apply CORS policy
 
 app.UseAuthorization();
 app.MapControllers();
+
+app.UseEndpoints(endpoints =>
+{
+    // Varsayılan rotayı index.html'ye yönlendir
+    endpoints.MapControllers();
+    endpoints.MapFallbackToFile("index.html");
+});
 
 app.Run();

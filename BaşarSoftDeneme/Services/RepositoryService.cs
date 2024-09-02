@@ -3,11 +3,6 @@ using BaşarSoftDeneme.Controllers;
 using BaşarSoftDeneme.Models;
 using Microsoft.EntityFrameworkCore;
 
-
-
-
-
-
 namespace BaşarSoftDeneme.Services
 {
     public class RepositoryService<T> : IRepositoryService<T> where T : class
@@ -36,7 +31,6 @@ namespace BaşarSoftDeneme.Services
             _dbSet.Add(entity);
             await _context.SaveChangesAsync();
             return entity;
-
         }
 
         public async Task UpdateAsync(T entity)
@@ -54,9 +48,6 @@ namespace BaşarSoftDeneme.Services
             {
                 throw new InvalidOperationException("Güncellenecek kayıt bulunamadı.");
             }
-
-
-
         }
 
         public async Task DeleteAsync(long id)

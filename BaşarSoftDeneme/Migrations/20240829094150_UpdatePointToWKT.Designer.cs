@@ -2,6 +2,7 @@
 using BaşarSoftDeneme.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BaşarSoftDeneme.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class dbContextModelSnapshot : ModelSnapshot
+    [Migration("20240829094150_UpdatePointToWKT")]
+    partial class UpdatePointToWKT
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,15 +32,9 @@ namespace BaşarSoftDeneme.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("WKT")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<double>("PointX")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("PointY")
-                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
